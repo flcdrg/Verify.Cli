@@ -8,7 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Verify" Version="19.0.0" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+    <Using Include="VerifyTests" />
+    <!--<PackageReference Include="ProjectDefaults" Version="1.0.82" PrivateAssets="all" />
+    <PackageReference Include="EmptyFiles" Version="4.1.0" PrivateAssets="None" />
+    <PackageReference Include="IndexRange" Version="1.0.2" PrivateAssets="all" />-->
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />
+    <PackageReference Include="Verify" Version="19.3.0" />
   </ItemGroup>
 
 </Project>
