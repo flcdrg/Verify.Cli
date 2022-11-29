@@ -6,3 +6,5 @@
 A command-line tool that allows using Verify for regular files.
 
 ## Usage
+
+TODO

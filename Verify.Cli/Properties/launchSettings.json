@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Verify.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "--file Verify.Cli.deps.json"
+    }
+  }
+}
