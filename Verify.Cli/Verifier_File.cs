@@ -2,8 +2,8 @@ namespace Verify.Cli;
 
 public static partial class Verifier
 {
-    static InnerVerifier GetVerifier(VerifySettings settings, string sourceFile, bool useUniqueDirectory) =>
-        new InnerVerifier(
+    static InnerVerifier GetVerifier(VerifySettings settings, string sourceFile) =>
+        new(
             sourceFile,
             settings,
             string.Empty,
@@ -15,14 +15,13 @@ public static partial class Verifier
     static SettingsTask Verify(
         VerifySettings? settings,
         string sourceFile,
-        Func<InnerVerifier, Task<VerifyResult>> verify,
-        bool useUniqueDirectory = false)
+        Func<InnerVerifier, Task<VerifyResult>> verify)
     {
         return new(
             settings,
             async verifySettings =>
             {
-                using var verifier = GetVerifier(verifySettings, sourceFile, useUniqueDirectory);
+                using var verifier = GetVerifier(verifySettings, sourceFile);
                 return await verify(verifier);
             });
     }
