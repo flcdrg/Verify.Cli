@@ -19,7 +19,7 @@
     <Reference Include="Verify">
       <HintPath>..\..\Verify\src\Verify\bin\Debug\net6.0\Verify.dll</HintPath>
     </Reference>
-    <PackageReference Include="Argon" Version="0.1.0" />
+    <PackageReference Include="Argon" Version="0.3.3" />
     <PackageReference Include="DiffEngine" Version="11.1.0" />
 
 	</ItemGroup>
