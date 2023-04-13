@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -20,7 +20,7 @@
       <HintPath>..\..\Verify\src\Verify\bin\Debug\net6.0\Verify.dll</HintPath>
     </Reference>
     <PackageReference Include="Argon" Version="0.1.0" />
-    <PackageReference Include="DiffEngine" Version="11.1.0" />
+    <PackageReference Include="DiffEngine" Version="11.3.0" />
 
 	</ItemGroup>
 
