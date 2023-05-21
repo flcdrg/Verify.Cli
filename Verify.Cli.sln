@@ -3,17 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Verify.Cli", "Verify.Cli\Verify.Cli.csproj", "{CF08108D-EBD1-43E9-82D7-2CCE628102FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verify.Cli", "Verify.Cli\Verify.Cli.csproj", "{CF08108D-EBD1-43E9-82D7-2CCE628102FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Verify.Cli.Tests", "Verify.Cli.Tests\Verify.Cli.Tests.csproj", "{83192E46-4F97-4FB3-9CA7-FCA4A1046352}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verify.Cli.Tests", "Verify.Cli.Tests\Verify.Cli.Tests.csproj", "{83192E46-4F97-4FB3-9CA7-FCA4A1046352}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Verify", "..\Verify\src\Verify\Verify.csproj", "{56E51A2E-B23A-462A-8961-85ED4589E89B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CF08108D-EBD1-43E9-82D7-2CCE628102FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -24,5 +23,12 @@ Global
 		{83192E46-4F97-4FB3-9CA7-FCA4A1046352}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83192E46-4F97-4FB3-9CA7-FCA4A1046352}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83192E46-4F97-4FB3-9CA7-FCA4A1046352}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56E51A2E-B23A-462A-8961-85ED4589E89B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56E51A2E-B23A-462A-8961-85ED4589E89B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56E51A2E-B23A-462A-8961-85ED4589E89B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56E51A2E-B23A-462A-8961-85ED4589E89B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

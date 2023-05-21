@@ -5,11 +5,7 @@ public static partial class Verifier
     static InnerVerifier GetVerifier(VerifySettings settings, string sourceFile) =>
         new(
             sourceFile,
-            settings,
-            string.Empty,
-            string.Empty,
-            new List<string>(0),
-            new PathInfo()
+            settings
         );
 
     static SettingsTask Verify(

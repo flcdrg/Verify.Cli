@@ -19,8 +19,6 @@ rootCommand.SetHandler(async (file) =>
             return;
         }
 
-        // ApplyScrubbers.UseAssembly(null, file.DirectoryName!);
-
         var settings = new VerifySettings();
         settings.DisableRequireUniquePrefix();
 

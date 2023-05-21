@@ -15,13 +15,11 @@
   </ItemGroup>
 
 	<!--Temporary while we figure out what changes we need in Verify -->
-  <ItemGroup>
-    <Reference Include="Verify">
-      <HintPath>..\..\Verify\src\Verify\bin\Debug\net6.0\Verify.dll</HintPath>
-    </Reference>
-    <PackageReference Include="Argon" Version="0.1.0" />
-    <PackageReference Include="DiffEngine" Version="11.1.0" />
-
+	<ItemGroup>
+		<ProjectReference Include="..\..\Verify\src\Verify\Verify.csproj" />
 	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="Nerdbank.GitVersioning" Version="3.6.132" />
+  </ItemGroup>
 
 </Project>
