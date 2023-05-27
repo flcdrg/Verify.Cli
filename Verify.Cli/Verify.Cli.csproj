@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,18 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <Using Include="VerifyTests" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />
-    <!--<PackageReference Include="Verify" Version="19.3.0" />-->
-  </ItemGroup>
-
-	<!--Temporary while we figure out what changes we need in Verify -->
-	<ItemGroup>
-		<ProjectReference Include="..\..\Verify\src\Verify\Verify.csproj" />
-	</ItemGroup>
-  <ItemGroup>
     <PackageReference Update="Nerdbank.GitVersioning" Version="3.6.133" />
+    <PackageReference Include="Verify" Version="20.2.0" />
   </ItemGroup>
 
 </Project>

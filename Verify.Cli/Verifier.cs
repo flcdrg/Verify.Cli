@@ -2,14 +2,29 @@
 
 public static partial class Verifier
 {
-    /// <summary>
-    /// Verifies the contents of <param name="path"/>.
-    /// </summary>
     public static SettingsTask VerifyFile(
         string path,
-        VerifySettings? settings = null,
-        object? info = null,
-        string sourceFile = "") =>
-        Verify(settings, sourceFile, _ => _.VerifyFile(path, info));
+        VerifySettings settings,
+        string sourceFile) =>
+        Verify(settings, sourceFile, _ => _.VerifyFile(path, null));
 
+    private static InnerVerifier GetVerifier(VerifySettings settings, string sourceFile) =>
+        new(
+            sourceFile,
+            settings
+        );
+
+    private static SettingsTask Verify(
+        VerifySettings? settings,
+        string sourceFile,
+        Func<InnerVerifier, Task<VerifyResult>> verify)
+    {
+        return new(
+            settings,
+            async verifySettings =>
+            {
+                using var verifier = GetVerifier(verifySettings, sourceFile);
+                return await verify(verifier);
+            });
+    }
 }
