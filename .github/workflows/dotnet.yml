@@ -81,20 +81,20 @@ jobs:
     #   run: |
     #     echo "::set-output name=GitBuildVersionSimple::$GitBuildVersionSimple"
     - name: Build logs
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: logs
         # A file, directory or wildcard pattern that describes what to upload
         path: '*.binlog'
 
     - name: Linux Binary
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: linux-x64
         path: Verify.Cli/bin/Release/net7.0/linux-x64/publish
 
     - name: Linux Binary
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: win-x64
         # A file, directory or wildcard pattern that describes what to upload
