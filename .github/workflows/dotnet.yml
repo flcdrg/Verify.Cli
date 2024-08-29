@@ -67,7 +67,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal
 
     - name: Publish Container
-      run: dotnet publish --os linux --arch x64 --self-contained /t:PublishContainer Verify.Cli
+      run: dotnet publish --os linux --arch x64 --self-contained /t:PublishContainer Verify.Cli -p ContainerArchiveOutputPath=${{ github.workspace }}/container.tar.gz
 
     - name: Publish Linux
       run: dotnet publish -r linux-x64 --self-contained -p:PublishSingleFile=true Verify.Cli
@@ -87,13 +87,19 @@ jobs:
         # A file, directory or wildcard pattern that describes what to upload
         path: '*.binlog'
 
+    - name: Container Archive
+      uses: actions/upload-artifact@v4
+      with:
+        name: container
+        path: container.tar.gz
+
     - name: Linux Binary
       uses: actions/upload-artifact@v4
       with:
         name: linux-x64
         path: Verify.Cli/bin/Release/net8.0/linux-x64/publish
 
-    - name: Linux Binary
+    - name: Windows Binary
       uses: actions/upload-artifact@v4
       with:
         name: win-x64
@@ -117,6 +123,8 @@ jobs:
           version: ${{ needs.build.outputs.GitBuildVersionSimple }}
 
       - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
 
       - name: Display structure of downloaded files
         run: ls -R
@@ -126,12 +134,12 @@ jobs:
           STEPS_CONTEXT: ${{ toJson(steps) }}
         run: echo "$STEPS_CONTEXT"
 
-#      - name: Upload assets
-#        uses: xresloader/upload-to-github-release@v1
-#        with:
-#          file: "./nupkg/**/*.nupkg"
-#          delete_file: "*.nupkg"
-#          overwrite: true
-#          release_id: ${{ steps.create_release.outputs.id }}
+      - name: Upload assets
+        uses: xresloader/upload-to-github-release@v1
+        with:
+          file: "./nupkg/**/*.nupkg;container.tar.gz"
+          delete_file: "*.nupkg;*.tar.gz"
+          overwrite: true
+          release_id: ${{ steps.create_release.outputs.id }}
 #        env:
 #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
