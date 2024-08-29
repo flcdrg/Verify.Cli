@@ -6,7 +6,7 @@ public static partial class Verifier
         string path,
         VerifySettings settings,
         string sourceFile) =>
-        Verify(settings, sourceFile, _ => _.VerifyFile(path, null));
+        Verify(settings, sourceFile, _ => _.VerifyFile(path, null, null));
 
     private static InnerVerifier GetVerifier(VerifySettings settings, string sourceFile) =>
         new(
