@@ -6,6 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <EnableSdkContainerSupport>true</EnableSdkContainerSupport>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>verify</ToolCommandName>
+    <PackageOutputPath>./nupkg</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
