@@ -56,6 +56,10 @@ jobs:
       #     username: ${{ env.DOCKERHUB_USERNAME }}
       #     password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Docker Login
+        run: |
+          export CR_PAT=${{ secrets.GITHUB_TOKEN }}
+          echo $CR_PAT | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
 
       - name: Import and push image
         run: |
