@@ -23,7 +23,7 @@ jobs:
       DOCKERHUB_USERNAME: flcdrg
       REGISTRY: ghcr.io
       REGISTRY2: docker.io
-      IMAGE_NAME: ${{ github.repository }}
+      IMAGE_NAME: verify-cli
 
     steps:
       - name: Download Assets
@@ -61,5 +61,5 @@ jobs:
         run: |
           docker load -i container.tar.gz
           docker images
-          docker tag ${{ env.IMAGE_NAME }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }}
+          docker tag ${{ env.IMAGE_NAME }}:latest ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }}
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.release.tag_name }}
