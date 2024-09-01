@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
  
     permissions:
-      contents: read
+      contents: write # to update tags
       packages: write
       attestations: write
       id-token: write
@@ -44,6 +44,16 @@ jobs:
       - name: List directory
         run: ls -lR
 
+      # Convert release tag to semver
+      - name: Convert release tag to semver
+        id: semver
+        run: |
+          tag=${{ github.event.release.tag_name }}
+          # remove the 'v' prefix
+          tag=${tag#"v"}
+
+          echo "version=$tag" >> $GITHUB_OUTPUT
+
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
       - name: Log into registry ${{ env.REGISTRY_GITHUB }}
@@ -63,17 +73,14 @@ jobs:
       - name: List Docker logins
         run: cat ~/.docker/config.json
 
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.2
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Import Docker image from tar.gz
         run: |
           docker import container.tar.gz ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest
           docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest ${{ env.IMAGE_NAME }}:latest
+          docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest ${{ env.REGISTRY_DOCKERHUB }}/${{ env.IMAGE_NAME }}:${{ steps.semver.outputs.version }}
+
           docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest index.docker.io/${{ env.IMAGE_NAME }}:latest
+          docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest index.docker.io/${{ env.IMAGE_NAME }}:${{ steps.semver.outputs.version }}
 
       # List docker images
       - name: List Docker images
