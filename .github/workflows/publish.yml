@@ -87,10 +87,14 @@ jobs:
         run: docker images --digests
 
       - name: Push Docker image to GitHub
-        run: docker push ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest
+        run: |
+          docker push ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest
+          docker push ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:${{ steps.semver.outputs.version }}
 
       - name: Push Docker image to DockerHub
-        run: docker push ${{ env.IMAGE_NAME }}:latest
+        run: |
+          docker push ${{ env.IMAGE_NAME }}:latest
+          docker push ${{ env.IMAGE_NAME }}:${{ steps.semver.outputs.version }}
 
       - name: Get digest of the image
         id: getdigest
