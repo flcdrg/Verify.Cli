@@ -76,9 +76,9 @@ jobs:
       - name: Import Docker image from tar.gz
         run: |
           docker import container.tar.gz ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest
+          docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:${{ steps.semver.outputs.version }}
           docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest ${{ env.IMAGE_NAME }}:latest
           docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest ${{ env.REGISTRY_DOCKERHUB }}/${{ env.IMAGE_NAME }}:${{ steps.semver.outputs.version }}
-          docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest ${{ env.IMAGE_NAME }}:${{ steps.semver.outputs.version }}
 
           # Tag for Docker Hub attestation
           docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest index.docker.io/${{ env.IMAGE_NAME }}:latest
