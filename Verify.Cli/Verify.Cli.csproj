@@ -16,7 +16,7 @@
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" Condition="$(Configuration) == 'Release'" />
     <PackageReference Update="Nerdbank.GitVersioning" Version="3.7.112" />
-    <PackageReference Include="Verify" Version="26.6.0" />
+    <PackageReference Include="Verify" Version="28.5.0" />
   </ItemGroup>
 
 </Project>
