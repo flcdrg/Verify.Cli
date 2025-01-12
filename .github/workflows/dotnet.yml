@@ -42,6 +42,9 @@ jobs:
     env:
       source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
 
+    outputs:
+      GitBuildVersionSimple: ${{ steps.version.outputs.GitBuildVersionSimple }}
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -58,6 +61,10 @@ jobs:
       - name: Build
         id: build
         run: dotnet build /bl
+
+      - name: Get version
+        id: version
+        run: echo "GitBuildVersionSimple=$GitBuildVersionSimple" >> "$GITHUB_OUTPUT"
 
       - name: Dump environment
         run: printenv | sort
