@@ -39,9 +39,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    outputs:
-      GitBuildVersionSimple: ${{ steps.gitversion.outputs.GitBuildVersionSimple }}
-
     env:
       source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
 
@@ -62,11 +59,21 @@ jobs:
         id: build
         run: dotnet build /bl
 
+      - name: Dump environment
+        run: printenv | sort
+
       - name: Test
         run: dotnet test --no-build --verbosity normal
 
       - name: Pack
         run: dotnet pack
+
+      - name: Publish .zip
+        run: dotnet publish
+
+      - name: Create .zip with version number
+        run: zip -r $GITHUB_WORKSPACE/Verify.Cli.$GitBuildVersionSimple.zip .
+        working-directory: Verify.Cli/bin/Release/net8.0/publish
 
       - name: Publish Container
         run: dotnet publish --os linux --arch x64 --self-contained /t:PublishContainer Verify.Cli -p ContainerArchiveOutputPath=${{ github.workspace }}/container.tar.gz
@@ -77,11 +84,6 @@ jobs:
       - name: Publish Windows
         run: dotnet publish -r win-x64 --self-contained -p:PublishSingleFile=true Verify.Cli
 
-      # # Set GitBuildVersionSimple output variable
-      # - name: gitversion
-      #   id: gitversion
-      #   run: |
-      #     echo "::set-output name=GitBuildVersionSimple::$GitBuildVersionSimple"
       - name: Build logs
         uses: actions/upload-artifact@v4
         with:
@@ -107,6 +109,12 @@ jobs:
           name: win-x64
           # A file, directory or wildcard pattern that describes what to upload
           path: Verify.Cli/bin/Release/net8.0/win-x64/publish
+
+      - name: Zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: zip
+          path: Verify.Cli.*.zip
 
       - name: NuGet package
         uses: actions/upload-artifact@v4
