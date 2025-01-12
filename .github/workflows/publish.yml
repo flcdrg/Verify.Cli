@@ -18,7 +18,7 @@ jobs:
 
   main:
     runs-on: ubuntu-latest
- 
+
     permissions:
       contents: write # to update tags
       packages: write
@@ -69,7 +69,7 @@ jobs:
           registry: ${{ env.REGISTRY_DOCKERHUB }}
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      
+
       - name: List Docker logins
         run: cat ~/.docker/config.json
 
