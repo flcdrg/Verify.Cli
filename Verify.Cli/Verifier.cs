@@ -9,10 +9,10 @@ public static partial class Verifier
         Verify(settings, sourceFile, _ => _.VerifyFile(path, null, null));
 
     private static InnerVerifier GetVerifier(VerifySettings settings, string sourceFile) =>
-        new(
-            sourceFile,
-            settings
-        );
+        new(Path.GetDirectoryName(sourceFile) ?? throw new InvalidOperationException("Got null for directory of sourceFile"), 
+            Path.GetFileName(sourceFile), 
+            settings);
+        
 
     private static SettingsTask Verify(
         VerifySettings? settings,

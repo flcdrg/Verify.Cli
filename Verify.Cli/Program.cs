@@ -21,6 +21,7 @@ rootCommand.SetHandler(async (file) =>
 
         var settings = new VerifySettings();
         settings.DisableRequireUniquePrefix();
+        
 
         var result = await Verifier.VerifyFile(file.FullName, settings, file.FullName);
     },
