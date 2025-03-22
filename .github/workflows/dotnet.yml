@@ -84,6 +84,7 @@ jobs:
 
       - name: Publish Container
         run: dotnet publish --os linux --arch x64 --self-contained /t:PublishContainer Verify.Cli -p ContainerArchiveOutputPath=${{ github.workspace }}/container.tar.gz
+        # run: dotnet publish -p ContainerRuntimeIdentifiers=\"linux-x64\;linux-arm64\" -p RuntimeIdentifiers=\"linux-x64\;linux-arm64\" --self-contained false /t:PublishContainer Verify.Cli -p ContainerArchiveOutputPath=${{ github.workspace }}/container.tar.gz
 
       - name: Publish Linux
         run: dotnet publish -r linux-x64 --self-contained -p:PublishSingleFile=true Verify.Cli
@@ -128,6 +129,34 @@ jobs:
         with:
           name: nupkg
           path: Verify.Cli/nupkg/*.nupkg
+
+  test_images:
+    name: Test images
+    runs-on: ubuntu-latest
+    needs: [build]
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm]
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: container
+
+      - name: Import Docker image from tar.gz
+        run: |
+          docker load -i container.tar.gz
+
+      - name: List Docker images
+        run: |
+          docker images
+
+          docker inspect verify-cli -f "{{.Os}}/{{.Architecture}}"
+
+      - name: Run container
+        run: docker run --rm verify-cli:latest --help
 
   update_release_draft:
     name: Update release draft
