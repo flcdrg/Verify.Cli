@@ -83,8 +83,13 @@ jobs:
         working-directory: Verify.Cli/bin/Release/net8.0/publish
 
       - name: Publish Container
-        run: dotnet publish --os linux --arch x64 --self-contained /t:PublishContainer Verify.Cli -p ContainerArchiveOutputPath=${{ github.workspace }}/container.tar.gz
-        # run: dotnet publish -p ContainerRuntimeIdentifiers=\"linux-x64\;linux-arm64\" -p RuntimeIdentifiers=\"linux-x64\;linux-arm64\" --self-contained false /t:PublishContainer Verify.Cli -p ContainerArchiveOutputPath=${{ github.workspace }}/container.tar.gz
+        run: dotnet publish --os linux --arch x64 --self-contained false /t:PublishContainer Verify.Cli -p ContainerArchiveOutputPath=${{ github.workspace }}/container.tar.gz
+
+      - name: Load container
+        run: |
+          ls -al
+          docker load -i container.tar.gz
+          docker images
 
       - name: Publish Linux
         run: dotnet publish -r linux-x64 --self-contained -p:PublishSingleFile=true Verify.Cli
@@ -104,6 +109,9 @@ jobs:
         with:
           name: container
           path: container.tar.gz
+      
+      - name: List tar contents
+        run: tar -tvf container.tar.gz
 
       - name: Linux Binary
         uses: actions/upload-artifact@v4
@@ -144,6 +152,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: container
+
+      - name: Display structure of downloaded files
+        run: |
+          ls -alR
+
+          tar -tvf container.tar.gz
 
       - name: Import Docker image from tar.gz
         run: |
