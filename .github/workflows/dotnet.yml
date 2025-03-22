@@ -50,6 +50,9 @@ jobs:
         with:
           fetch-depth: 0 # full history
 
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v4
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
@@ -83,12 +86,36 @@ jobs:
         working-directory: Verify.Cli/bin/Release/net9.0/publish
 
       - name: Publish Container
-        run: dotnet publish --os linux --arch x64 --self-contained false /t:PublishContainer Verify.Cli -p ContainerArchiveOutputPath=${{ github.workspace }}/container.tar.gz
+        run: dotnet publish -p RuntimeIdentifiers=\"linux-musl-x64\;linux-musl-arm64\" -p ContainerRuntimeIdentifiers=\"linux-musl-x64\;linux-musl-arm64\" --self-contained false /t:PublishContainer Verify.Cli -p ContainerArchiveOutputPath=${{ github.workspace }}/containers
 
       - name: Load container
         run: |
-          ls -al
-          docker load -i container.tar.gz
+          ls -al containers
+          echo $PWD
+          docker info
+
+          ROOTDIR=$(docker info -f json | jq -r .DockerRootDir)
+
+          # if tmp directory does not exist under ROOTDIR, create it
+          if [ ! -d "$ROOTDIR/tmp" ]; then
+            sudo mkdir -p $ROOTDIR/tmp
+            echo "Created $ROOTDIR/tmp"
+          fi
+
+          which docker
+
+          echo ""
+
+          printenv
+
+          echo ""
+
+          # Find all .tar.gz files in containers directory and load them into Docker
+          for file in containers/*.tar.gz; do
+            echo "Loading $file"
+            docker load -i "$file"
+          done
+
           docker images
 
       - name: Publish Linux
@@ -107,11 +134,8 @@ jobs:
       - name: Container Archive
         uses: actions/upload-artifact@v4
         with:
-          name: container
-          path: container.tar.gz
-      
-      - name: List tar contents
-        run: tar -tvf container.tar.gz
+          name: containers
+          path: containers/*.tar.gz
 
       - name: Linux Binary
         uses: actions/upload-artifact@v4
@@ -142,26 +166,28 @@ jobs:
     name: Test images
     runs-on: ubuntu-latest
     needs: [build]
-
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu-24.04-arm]
+        include:
+          - os: ubuntu-latest
+            suffix: linux-musl-x64
+          - os: ubuntu-24.04-arm
+            suffix: linux-musl-arm64
 
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
-          name: container
+          name: containers
 
       - name: Display structure of downloaded files
         run: |
           ls -alR
 
-          tar -tvf container.tar.gz
-
       - name: Import Docker image from tar.gz
         run: |
-          docker load -i container.tar.gz
+          docker load -i containers/verify-cli-${{ matrix.suffix }}.tar.gz
 
       - name: List Docker images
         run: |
