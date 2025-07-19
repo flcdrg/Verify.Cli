@@ -2,29 +2,33 @@
 using Verify.Cli;
 
 var fileOption = new Option<FileInfo?>(
-    name: "--file",
-    description: "The file to verify."
-);
+    name: "--file"
+)
+{
+    Description = "The file to verify",
+};
 
-fileOption.AddAlias("-f");
-fileOption.IsRequired = true;
+fileOption.Aliases.Add("-f");
+fileOption.Required = true;
 
 var rootCommand = new RootCommand("Verify CLI");
-rootCommand.AddOption(fileOption);
+rootCommand.Options.Add(fileOption);
 
-rootCommand.SetHandler(async (file) =>
+var parseResult = rootCommand.Parse(args);
+
+rootCommand.SetAction(async (parseResult) =>
+{
+    var file = parseResult.GetValue(fileOption);
+
+    if (file == null)
     {
-        if (file == null)
-        {
-            return;
-        }
+        return;
+    }
 
-        var settings = new VerifySettings();
-        settings.DisableRequireUniquePrefix();
-        
+    var settings = new VerifySettings();
+    settings.DisableRequireUniquePrefix();
 
-        var result = await Verifier.VerifyFile(file.FullName, settings, file.FullName);
-    },
-    fileOption);
+    var result = await Verifier.VerifyFile(file.FullName, settings, file.FullName);
+});
 
-return await rootCommand.InvokeAsync(args);
+return parseResult.Invoke();
