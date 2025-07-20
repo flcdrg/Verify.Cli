@@ -17,34 +17,35 @@ var verifiedDirOption = new Option<DirectoryInfo?>(
 {
     Description = "Directory to store/look for .verified files",
 };
-
 verifiedDirOption.Aliases.Add("-d");
+
+var scrubInlineDateTime = new Option<string?>(
+    name: "--scrub-inline-datetime")
+{
+    Description = "Format for inline date times to scrub, e.g., 'yyyy-MM-ddTHH:mm:ss.fffZ'.",
+};
 
 var rootCommand = new RootCommand("Verify CLI");
 rootCommand.Options.Add(fileOption);
 rootCommand.Options.Add(verifiedDirOption);
+rootCommand.Options.Add(scrubInlineDateTime);
 
 var parseResult = rootCommand.Parse(args);
 
-rootCommand.SetAction(async (parseResult) =>
+rootCommand.SetAction(async (innerParseResult) =>
 {
-    var file = parseResult.GetValue(fileOption);
-    var verifiedDir = parseResult.GetValue(verifiedDirOption);
+    var file = innerParseResult.GetValue(fileOption);
+    var options = new VerifyFileOptions(
+        VerifiedDir: innerParseResult.GetValue(verifiedDirOption),
+        ScrubInlineDatetime: innerParseResult.GetValue(scrubInlineDateTime)
+    );
 
     if (file == null)
     {
         return;
     }
 
-    var settings = new VerifySettings();
-    settings.DisableRequireUniquePrefix();
-
-    if (verifiedDir != null)
-    {
-        settings.UseDirectory(verifiedDir.FullName);
-    }
-
-    var result = await Verifier.VerifyFile(file.FullName, settings, file.FullName);
+    await FileVerifier.VerifyFileAsync(file, options);
 });
 
 return parseResult.Invoke();

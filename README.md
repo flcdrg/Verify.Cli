@@ -29,6 +29,7 @@ The first time you use Verify.Cli, it will output the contents of the file.
 
 - `--file` or `-f`: The file to verify (required)
 - `--verified-dir` or `-d`: Directory to store/look for .verified files (optional)
+- `--scrub-inline-datetime`: Format for inline date times to scrub, e.g., 'yyyy-MM-ddTHH:mm:ss.fffZ' (optional)
 
 ### Examples
 
@@ -45,6 +46,20 @@ verify --file C:\tmp\example.txt --verified-dir C:\MyVerifiedFiles
 ```
 
 This will look for the verified file at `C:\MyVerifiedFiles\example.txt.verified.txt` instead of the default location next to the source file.
+
+With date time scrubbing:
+
+```pwsh
+verify --file C:\tmp\log.txt --scrub-inline-datetime "yyyy-MM-ddTHH:mm:ss.fffZ"
+```
+
+This will scrub inline date times matching the specified format from the file content before verification.
+
+You can combine options:
+
+```pwsh
+verify --file C:\tmp\log.txt --verified-dir C:\MyVerifiedFiles --scrub-inline-datetime "yyyy-MM-dd HH:mm:ss"
+```
 
 When the files match, the tool exits with code 0 and produces no output.
 
