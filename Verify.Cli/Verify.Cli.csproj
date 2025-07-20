@@ -16,10 +16,15 @@
     <Description>A command line tool for verifying files are unchanged, or if they are then show a diff of what has changed.
 As it leverages the Verify library, when run in an interactive environment it can also use any supported installed diff viewers to show the diff.</Description>
     <ContainerFamily>alpine</ContainerFamily>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
   <ItemGroup>
     <Using Include="VerifyTests" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta6.25358.103" />
     <PackageReference Include="Verify" Version="30.4.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
 </Project>
