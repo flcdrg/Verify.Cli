@@ -38,6 +38,8 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     env:
       source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
