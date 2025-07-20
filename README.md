@@ -5,12 +5,22 @@
 
 A command-line tool that uses the [Verify](https://github.com/VerifyTests/Verify) library for regular files (without requiring you to create a unit test project).
 
+## Installation
+
+Install as .NET global tool
+
+```bash
+dotnet tool install -g Verify.Cli
+```
+
+Once installed, invoke directly via the `verify` command.
+
 ## Usage
 
 If you run this tool interactively, then you'll get a similar experience that you would using VerifyTests in a .NET unit test project. Verify.Cli will utilise any existing compatible file diff tool to display the diff.
 
 ```bash
-./Verify.Cli --file <path to file to verify> [--verified-dir <directory>]
+verify --file <path to file to verify> [--verified-dir <directory>]
 ```
 
 The first time you use Verify.Cli, it will output the contents of the file.
@@ -25,13 +35,13 @@ The first time you use Verify.Cli, it will output the contents of the file.
 Basic usage:
 
 ```pwsh
-.\Verify.Cli.exe --file C:\tmp\example.txt
+verify --file C:\tmp\example.txt
 ```
 
 With custom verified files directory:
 
 ```pwsh
-.\Verify.Cli.exe --file C:\tmp\example.txt --verified-dir C:\MyVerifiedFiles
+verify --file C:\tmp\example.txt --verified-dir C:\MyVerifiedFiles
 ```
 
 This will look for the verified file at `C:\MyVerifiedFiles\example.txt.verified.txt` instead of the default location next to the source file.
@@ -80,4 +90,5 @@ a text file.
 
 Example with Beyond Compare launched:
 
-![Screenshot of using Beyond Compare to see differences in files](beyond-compare.png)
+<!-- Use full URL so image is rendered on nuget.org package page too -->
+![Screenshot of using Beyond Compare to see differences in files](https://raw.githubusercontent.com/flcdrg/Verify.Cli/refs/heads/main/beyond-compare.png)
