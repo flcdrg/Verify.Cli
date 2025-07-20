@@ -3,21 +3,40 @@
 [![.NET](https://github.com/flcdrg/Verify.Cli/actions/workflows/dotnet.yml/badge.svg)](https://github.com/flcdrg/Verify.Cli/actions/workflows/dotnet.yml)
 [![NuGet Status](https://img.shields.io/nuget/v/Verify.Cli.svg?label=Verify.Cli)](https://www.nuget.org/packages/Verify.Cli/)
 
-A command-line tool that allows using [Verify](https://github.com/VerifyTests/Verify) for regular files (without requiring you to create a unit test project).
+A command-line tool that uses the [Verify](https://github.com/VerifyTests/Verify) library for regular files (without requiring you to create a unit test project).
 
 ## Usage
 
-If you run interactively, then you'll get a similar experience to using VerifyTests in a .NET unit test project - with the tool looking for any file diff tooling to display the diff.
+If you run this tool interactively, then you'll get a similar experience that you would using VerifyTests in a .NET unit test project. Verify.Cli will utilise any existing compatible file diff tool to display the diff.
 
 ```bash
-./Verify.Cli --file <path to file to verify>
+./Verify.Cli --file <path to file to verify> [--verified-dir <directory>]
 ```
 
-The first time you use Verify, it will output the contents of the file.
+The first time you use Verify.Cli, it will output the contents of the file.
+
+### Options
+
+- `--file` or `-f`: The file to verify (required)
+- `--verified-dir` or `-d`: Directory to store/look for .verified files (optional)
+
+### Examples
+
+Basic usage:
 
 ```pwsh
 .\Verify.Cli.exe --file C:\tmp\example.txt
 ```
+
+With custom verified files directory:
+
+```pwsh
+.\Verify.Cli.exe --file C:\tmp\example.txt --verified-dir C:\MyVerifiedFiles
+```
+
+This will look for the verified file at `C:\MyVerifiedFiles\example.txt.verified.txt` instead of the default location next to the source file.
+
+When the files match, the tool exits with code 0 and produces no output.
 
 ```text
 Unhandled exception: VerifyException: Directory: C:\tmp
@@ -34,7 +53,7 @@ This is
 a text file.
 ```
 
-Your diff tool of choice (if found by Verify) can then be used to compare to the verified file (if it exists), or create it (if the first time).
+Your diff tool of choice (if found by the [Verify's DiffEngine library](https://github.com/VerifyTests/DiffEngine#supported-tools)) can then be used to compare to the verified file (if it exists), or create it (if the first time).
 
 If the verified file matches the received file, then there is no output (and the exit code is zero).
 
