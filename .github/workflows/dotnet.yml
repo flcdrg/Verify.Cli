@@ -142,6 +142,8 @@ jobs:
     name: Test images
     runs-on: ubuntu-latest
     needs: [build]
+    permissions:
+      contents: read
 
     strategy:
       matrix:
