@@ -3,6 +3,7 @@
   "inherit": true,
   "cloudBuild": {
     "setVersionVariables": true,
+    "setAllVariables": true,
     "buildNumber": {
       "enabled": true
     }
