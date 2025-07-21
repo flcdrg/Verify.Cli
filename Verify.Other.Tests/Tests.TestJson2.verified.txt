@@ -1,6 +1,0 @@
-﻿{
-  id: Guid_1,
-  time: DateTimeOffset_1,
-  name: David Gardiner,
-  currentUser: TheUserName
-}

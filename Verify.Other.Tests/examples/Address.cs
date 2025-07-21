@@ -1,4 +1,4 @@
-namespace Verify.Other.Tests;
+namespace Verify.Other.Tests.examples;
 
 #pragma warning disable CS8618
 public class Address
