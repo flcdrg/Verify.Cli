@@ -1,3 +1,5 @@
+using Verify.Other.Tests.examples;
+
 namespace Verify.Other.Tests;
 
 public class Tests
@@ -37,6 +39,9 @@ public class Tests
 
         var settings = new VerifySettings();
         settings.ScrubUserName();
+
+        // Ensure received and verified files have .json suffix (otherwise it will be .txt)
+        settings.UseStrictJson();
 
         return VerifyJson(text, settings);
         // end-snippet

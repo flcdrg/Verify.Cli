@@ -1,4 +1,4 @@
-namespace Verify.Other.Tests;
+namespace Verify.Other.Tests.examples;
 
 public static class ClassBeingTested
 {
