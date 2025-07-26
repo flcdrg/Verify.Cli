@@ -15,6 +15,9 @@ public static class StringScrubber
     /// </returns>
     public static Action<StringBuilder> BuildReplaceStrings([StringSyntax(StringSyntaxAttribute.Regex)] string pattern)
     {
+        if (string.IsNullOrEmpty(pattern))
+            throw new ArgumentException("Value cannot be null or empty.", nameof(pattern));
+
         return (builder) =>
         {
             var value = builder.ToString();
