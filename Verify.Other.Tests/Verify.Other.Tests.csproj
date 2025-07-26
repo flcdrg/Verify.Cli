@@ -37,6 +37,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Verify.Cli\Verify.Cli.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="azure-pipeline-template-expression.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="data.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

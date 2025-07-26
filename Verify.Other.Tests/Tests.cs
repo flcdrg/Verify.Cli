@@ -1,4 +1,6 @@
+using Verify.Cli;
 using Verify.Other.Tests.examples;
+using Verifier = VerifyXunit.Verifier;
 
 namespace Verify.Other.Tests;
 
@@ -45,5 +47,14 @@ public class Tests
 
         return VerifyJson(text, settings);
         // end-snippet
+    }
+
+    [Fact]
+    public Task FileWithScrubber()
+    {
+        var settings = new VerifySettings();
+        settings.AddScrubber(StringScrubber.BuildReplaceStrings("(?<prefix>\")/_astro/[^\"]+(?<suffix>\")"));
+
+        return VerifyFile("azure-pipeline-template-expression.html", settings);
     }
 }
