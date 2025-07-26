@@ -7,3 +7,5 @@ The main application is located in `Verify.Cli`, which is a .NET 9 console appli
 Integration tests are located in `Verify.Cli.Tests`, which is a .NET 9 test project.
 
 Other additional tests to validate both the Verify library and the CLI tool are located in `Verify.Other.Tests`, which is a .NET 9 test project.
+
+All Markdown files should comply with Markdownlint rules.
