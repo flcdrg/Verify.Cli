@@ -4,3 +4,4 @@
 *.verified.html text eol=lf working-tree-encoding=UTF-8
 *.verified.bin binary
 *.json text eol=lf
+*.html text eol=lf
