@@ -1,6 +1,9 @@
 ﻿namespace Verify.Cli;
 
-public record VerifyFileOptions(DirectoryInfo? VerifiedDir = null, string? ScrubInlineDatetime = null);
+public record VerifyFileOptions(
+    DirectoryInfo? VerifiedDir = null,
+    string? ScrubInlineDatetime = null,
+    string? ScrubInlinePattern = null);
 
 public static class FileVerifier
 {
@@ -17,6 +20,11 @@ public static class FileVerifier
         if (options.ScrubInlineDatetime != null)
         {
             settings.ScrubInlineDateTimes(options.ScrubInlineDatetime);
+        }
+
+        if (options.ScrubInlinePattern != null)
+        {
+            settings.AddScrubber(StringScrubber.BuildReplaceStrings(options.ScrubInlinePattern));
         }
 
         VerifierSettings.OmitContentFromException();

@@ -30,6 +30,7 @@ The first time you use Verify.Cli, it will output the contents of the file.
 - `--file` or `-f`: The file to verify (required)
 - `--verified-dir` or `-d`: Directory to store/look for .verified files (optional)
 - `--scrub-inline-datetime`: Format for inline date times to scrub, e.g., 'yyyy-MM-ddTHH:mm:ss.fffZ' (optional)
+- `--scrub-inline-pattern`: Regex pattern to match inline strings for scrubbing, e.g., '"/astro/[^"]+"|(?&lt;prefix&gt;")/_astro/[^"]+(?&lt;suffix&gt;")' (optional)
 
 ### Examples
 
@@ -55,10 +56,26 @@ verify --file C:\tmp\log.txt --scrub-inline-datetime "yyyy-MM-ddTHH:mm:ss.fffZ"
 
 This will scrub inline date times matching the specified format from the file content before verification.
 
+With pattern scrubbing:
+
+```pwsh
+verify --file C:\tmp\output.html --scrub-inline-pattern "\"/astro/[^\"]+\""
+```
+
+This will scrub inline strings matching the regex pattern (e.g., dynamic asset paths like "/astro/chunk-123.js") from the file content before verification.
+
+With pattern scrubbing using named groups to preserve parts:
+
+```pwsh
+verify --file C:\tmp\output.html --scrub-inline-pattern "(?<prefix>\")/_astro/[^\"]+(?<suffix>\")"
+```
+
+This will replace the dynamic part while preserving the prefix and suffix (e.g., "/_astro/chunk-123.js" becomes the preserved prefix and suffix).
+
 You can combine options:
 
 ```pwsh
-verify --file C:\tmp\log.txt --verified-dir C:\MyVerifiedFiles --scrub-inline-datetime "yyyy-MM-dd HH:mm:ss"
+verify --file C:\tmp\log.txt --verified-dir C:\MyVerifiedFiles --scrub-inline-datetime "yyyy-MM-dd HH:mm:ss" --scrub-inline-pattern "id=\"[^\"]+\""
 ```
 
 When the files match, the tool exits with code 0 and produces no output.

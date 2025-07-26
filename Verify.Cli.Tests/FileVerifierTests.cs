@@ -28,4 +28,18 @@ public class FileVerifierTests
         // Act & Assert
         await FileVerifier.VerifyFileAsync(file, options);
     }
+
+    [Fact]
+    public async Task FileWithInlinePattern_ScrubsCorrectly()
+    {
+        // Arrange
+        var file = new FileInfo("examples/azure-pipeline-template-expression.html");
+
+        // Pattern includes named groups for prefix and suffix
+        // This ensures that the replacement string retains the original quotes around the matched pattern
+        var options = new VerifyFileOptions(ScrubInlinePattern: "(?<prefix>\")/_astro/[^\"]+(?<suffix>\")");
+        
+        // Act & Assert
+        await FileVerifier.VerifyFileAsync(file, options);
+    }
 }
