@@ -42,4 +42,39 @@ public class FileVerifierTests
         // Act & Assert
         await FileVerifier.VerifyFileAsync(file, options);
     }
+
+    [Fact]
+    public async Task FileWithInlineRemove_RemovesCorrectly()
+    {
+        // Arrange
+        var file = new FileInfo("examples/withRemovableIds.html");
+
+        // Simple text to remove (not regex) - removes all instances
+        var options = new VerifyFileOptions(ScrubInlineRemove: " data-temp-id");
+        
+        // Act & Assert
+        await FileVerifier.VerifyFileAsync(file, options);
+    }
+
+    [Fact]
+    public async Task FileWithInlineRemove_EmptyPattern_ThrowsException()
+    {
+        // Arrange
+        var file = new FileInfo("examples/same.json");
+        var options = new VerifyFileOptions(ScrubInlineRemove: "");
+        
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(async () => await FileVerifier.VerifyFileAsync(file, options));
+    }
+
+    [Fact]
+    public async Task FileWithInlineRemove_NullPattern_DoesNothing()
+    {
+        // Arrange
+        var file = new FileInfo("examples/same.json");
+        var options = new VerifyFileOptions(ScrubInlineRemove: null);
+        
+        // Act & Assert - Should not throw
+        await FileVerifier.VerifyFileAsync(file, options);
+    }
 }

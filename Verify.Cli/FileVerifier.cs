@@ -3,7 +3,8 @@
 public record VerifyFileOptions(
     DirectoryInfo? VerifiedDir = null,
     string? ScrubInlineDatetime = null,
-    string? ScrubInlinePattern = null);
+    string? ScrubInlinePattern = null,
+    string? ScrubInlineRemove = null);
 
 public static class FileVerifier
 {
@@ -25,6 +26,11 @@ public static class FileVerifier
         if (options.ScrubInlinePattern != null)
         {
             settings.AddScrubber(StringScrubber.BuildReplaceStrings(options.ScrubInlinePattern));
+        }
+
+        if (options.ScrubInlineRemove != null)
+        {
+            settings.AddScrubber(StringScrubber.BuildRemoveText(options.ScrubInlineRemove));
         }
 
         VerifierSettings.OmitContentFromException();
