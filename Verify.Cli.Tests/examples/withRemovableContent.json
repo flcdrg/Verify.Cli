@@ -1,0 +1,9 @@
+{
+  "this": "is",
+  "a": "test",
+  "id": "temp-12345",
+  "data": {
+    "sessionId": "sess-abcdef", 
+    "content": "Hello World"
+  }
+}

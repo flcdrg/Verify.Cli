@@ -31,11 +31,18 @@ var scrubInlinePattern = new Option<string?>(
     Description = "Regex pattern to match inline strings for scrubbing, e.g., '\"/astro/[^\"]+\"', or '(?<prefix>\")/_astro/[^\"]+(?<suffix>\")'.",
 };
 
+var scrubInlineRemove = new Option<string?>(
+    name: "--scrub-inline-remove")
+{
+    Description = "Text to match and remove from the file content, e.g., 'temp-id-123'.",
+};
+
 var rootCommand = new RootCommand("Verify CLI");
 rootCommand.Options.Add(fileOption);
 rootCommand.Options.Add(verifiedDirOption);
 rootCommand.Options.Add(scrubInlineDateTime);
 rootCommand.Options.Add(scrubInlinePattern);
+rootCommand.Options.Add(scrubInlineRemove);
 
 var parseResult = rootCommand.Parse(args);
 
@@ -45,7 +52,8 @@ rootCommand.SetAction(async (innerParseResult) =>
     var options = new VerifyFileOptions(
         VerifiedDir: innerParseResult.GetValue(verifiedDirOption),
         ScrubInlineDatetime: innerParseResult.GetValue(scrubInlineDateTime),
-        ScrubInlinePattern: innerParseResult.GetValue(scrubInlinePattern)
+        ScrubInlinePattern: innerParseResult.GetValue(scrubInlinePattern),
+        ScrubInlineRemove: innerParseResult.GetValue(scrubInlineRemove)
     );
 
     if (file == null)

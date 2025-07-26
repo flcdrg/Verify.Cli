@@ -60,4 +60,97 @@ public static class StringScrubber
             builder.Append(result);
         };
     }
+
+    /// <summary>
+    /// Builds a scrubber action that removes all occurrences of the given text from a <see cref="StringBuilder"/>.
+    /// Uses simple string matching rather than regex for better performance and simplicity.
+    /// </summary>
+    /// <param name="textToRemove">The exact text to remove from the content.</param>
+    /// <returns>
+    /// An <see cref="Action{StringBuilder}"/> that performs the removal in the provided <see cref="StringBuilder"/>.
+    /// </returns>
+    public static Action<StringBuilder> BuildRemoveText(string textToRemove)
+    {
+        if (string.IsNullOrEmpty(textToRemove))
+            throw new ArgumentException("Value cannot be null or empty.", nameof(textToRemove));
+
+        return (builder) =>
+        {
+            // Get the content as a span to avoid string allocation during search
+            var originalLength = builder.Length;
+            if (originalLength == 0)
+                return;
+
+            // For small builders, work directly with spans for better performance
+            if (originalLength < 1024)
+            {
+                var value = builder.ToString();
+                var valueSpan = value.AsSpan();
+                
+                if (valueSpan.IndexOf(textToRemove.AsSpan(), StringComparison.Ordinal) == -1)
+                    return;
+
+                builder.Clear();
+                var searchStart = 0;
+                
+                while (searchStart < valueSpan.Length)
+                {
+                    var foundIndex = valueSpan[searchStart..].IndexOf(textToRemove.AsSpan(), StringComparison.Ordinal);
+                    if (foundIndex == -1)
+                    {
+                        // No more matches, append the rest
+                        builder.Append(valueSpan[searchStart..]);
+                        break;
+                    }
+                    
+                    // Append text before the match
+                    var actualIndex = searchStart + foundIndex;
+                    if (actualIndex > searchStart)
+                    {
+                        builder.Append(valueSpan.Slice(searchStart, actualIndex - searchStart));
+                    }
+                    
+                    // Skip the matched text and continue searching
+                    searchStart = actualIndex + textToRemove.Length;
+                }
+            }
+            else
+            {
+                // For larger builders, use StringBuilder with span optimizations
+                var value = builder.ToString();
+                var valueSpan = value.AsSpan();
+                
+                if (valueSpan.IndexOf(textToRemove.AsSpan(), StringComparison.Ordinal) == -1)
+                    return;
+
+                var result = new StringBuilder(builder.Length);
+                var lastIndex = 0;
+
+                while (lastIndex < valueSpan.Length)
+                {
+                    var searchIndex = valueSpan[lastIndex..].IndexOf(textToRemove.AsSpan(), StringComparison.Ordinal);
+                    if (searchIndex == -1)
+                    {
+                        // No more matches, append the rest
+                        result.Append(valueSpan[lastIndex..]);
+                        break;
+                    }
+
+                    var actualIndex = lastIndex + searchIndex;
+                    
+                    // Append text before the match
+                    if (actualIndex > lastIndex)
+                    {
+                        result.Append(valueSpan.Slice(lastIndex, actualIndex - lastIndex));
+                    }
+
+                    // Skip the matched text (don't append it - this removes it)
+                    lastIndex = actualIndex + textToRemove.Length;
+                }
+
+                builder.Clear();
+                builder.Append(result);
+            }
+        };
+    }
 }

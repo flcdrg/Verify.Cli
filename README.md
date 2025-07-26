@@ -31,6 +31,7 @@ The first time you use Verify.Cli, it will output the contents of the file.
 - `--verified-dir` or `-d`: Directory to store/look for .verified files (optional)
 - `--scrub-inline-datetime`: Format for inline date times to scrub, e.g., 'yyyy-MM-ddTHH:mm:ss.fffZ' (optional)
 - `--scrub-inline-pattern`: Regex pattern to match inline strings for scrubbing, e.g., '"/astro/[^"]+"|(?&lt;prefix&gt;")/_astro/[^"]+(?&lt;suffix&gt;")' (optional)
+- `--scrub-inline-remove`: Text to match and remove from the file content, e.g., 'temp-id-123' (optional)
 
 ### Examples
 
@@ -72,10 +73,18 @@ verify --file C:\tmp\output.html --scrub-inline-pattern "(?<prefix>\")/_astro/[^
 
 This will replace the dynamic part while preserving the prefix and suffix (e.g., "/_astro/chunk-123.js" becomes the preserved prefix and suffix).
 
+With text removal:
+
+```pwsh
+verify --file C:\tmp\output.html --scrub-inline-remove "data-temp-id"
+```
+
+This will remove all instances of the text "data-temp-id" from the file content before verification.
+
 You can combine options:
 
 ```pwsh
-verify --file C:\tmp\log.txt --verified-dir C:\MyVerifiedFiles --scrub-inline-datetime "yyyy-MM-dd HH:mm:ss" --scrub-inline-pattern "id=\"[^\"]+\""
+verify --file C:\tmp\log.txt --verified-dir C:\MyVerifiedFiles --scrub-inline-datetime "yyyy-MM-dd HH:mm:ss" --scrub-inline-pattern "id=\"[^\"]+\"" --scrub-inline-remove "temp-session"
 ```
 
 When the files match, the tool exits with code 0 and produces no output.

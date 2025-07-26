@@ -57,4 +57,19 @@ public class Tests
 
         return VerifyFile("azure-pipeline-template-expression.html", settings);
     }
+
+    [Fact]
+    public Task FileWithRemoveScrubber()
+    {
+        var settings = new VerifySettings();
+        settings.AddScrubber(StringScrubber.BuildRemoveText("temp-123"));
+
+        return VerifyJson("""
+        {
+          "name": "test",
+          "id": "temp-123",
+          "value": 42
+        }
+        """, settings);
+    }
 }
