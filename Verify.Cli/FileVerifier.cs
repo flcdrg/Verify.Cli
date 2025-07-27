@@ -1,10 +1,20 @@
 ﻿namespace Verify.Cli;
 
+public enum Verbosity
+{
+    Quiet,
+    Minimal,
+    Normal,
+    Detailed,
+    Diagnostic
+}
+
 public record VerifyFileOptions(
     DirectoryInfo? VerifiedDir = null,
     string? ScrubInlineDatetime = null,
     string? ScrubInlinePattern = null,
-    string? ScrubInlineRemove = null);
+    string? ScrubInlineRemove = null,
+    Verbosity Verbosity = Verbosity.Normal);
 
 public static class FileVerifier
 {
@@ -39,7 +49,38 @@ public static class FileVerifier
         {
             settings.UseDirectory(options.VerifiedDir.FullName);
         }
+
+        // Output detailed information if verbosity is detailed or diagnostic
+        if (options.Verbosity >= Verbosity.Detailed)
+        {
+            Console.WriteLine($"Source file path: {fullName}");
+            
+            // Calculate received and verified paths to match Verify library naming convention
+            var directory = options.VerifiedDir?.FullName ?? Path.GetDirectoryName(fullName)!;
+            var fileName = Path.GetFileNameWithoutExtension(fullName);
+            var extension = Path.GetExtension(fullName);
+            
+            var receivedPath = Path.Combine(directory, $"{fileName}.received{extension}");
+            var verifiedPath = Path.Combine(directory, $"{fileName}.verified{extension}");
+            
+            Console.WriteLine($"Received path: {receivedPath}");
+            Console.WriteLine($"Verified path: {verifiedPath}");
+        }
         
-        await Verifier.VerifyFile(fullName, settings, file.FullName);
+        try
+        {
+            await Verifier.VerifyFile(fullName, settings, file.FullName);
+            
+            // If we reach here, verification succeeded (files match)
+            if (options.Verbosity >= Verbosity.Detailed)
+            {
+                Console.WriteLine("Files match");
+            }
+        }
+        catch (Exception)
+        {
+            // Verification failed, let the exception bubble up
+            throw;
+        }
     }
 }

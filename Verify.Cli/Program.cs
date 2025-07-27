@@ -37,6 +37,12 @@ var scrubInlineRemove = new Option<string?>(
     Description = "Text to match and remove from the file content, e.g., 'temp-id-123'.",
 };
 
+var verbosityOption = new Option<Verbosity?>(
+    name: "--verbosity")
+{
+    Description = "Set the verbosity level. Options are: quiet, minimal, normal, detailed, diagnostic.",
+};
+
 var rootCommand = new RootCommand("Verify CLI")
 {
     Description = "A command-line tool to verify files against expected content."
@@ -46,6 +52,7 @@ rootCommand.Options.Add(verifiedDirOption);
 rootCommand.Options.Add(scrubInlineDateTime);
 rootCommand.Options.Add(scrubInlinePattern);
 rootCommand.Options.Add(scrubInlineRemove);
+rootCommand.Options.Add(verbosityOption);
 
 var parseResult = rootCommand.Parse(args);
 
@@ -56,7 +63,8 @@ rootCommand.SetAction(async (innerParseResult) =>
         VerifiedDir: innerParseResult.GetValue(verifiedDirOption),
         ScrubInlineDatetime: innerParseResult.GetValue(scrubInlineDateTime),
         ScrubInlinePattern: innerParseResult.GetValue(scrubInlinePattern),
-        ScrubInlineRemove: innerParseResult.GetValue(scrubInlineRemove)
+        ScrubInlineRemove: innerParseResult.GetValue(scrubInlineRemove),
+        Verbosity: innerParseResult.GetValue(verbosityOption) ?? Verbosity.Normal
     );
 
     if (file == null)
