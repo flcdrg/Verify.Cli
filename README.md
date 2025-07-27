@@ -8,6 +8,8 @@ A command-line tool that uses the [Verify](https://github.com/VerifyTests/Verify
 
 ## Installation
 
+### As a .NET global tool
+
 Install as .NET global tool
 
 ```bash
@@ -15,6 +17,22 @@ dotnet tool install -g Verify.Cli
 ```
 
 Once installed, invoke directly via the `verify` command.
+
+### Docker image
+
+An image is published to Docker Hub. Ensure that you create a volume mapping (via the `-v` parameter) so that the container can access the files you wish to verify.
+
+Bash:
+
+```bash
+docker run --rm -v $PWD:/tmp flcdrg/verify-cli --file /tmp/examples/same.json
+```
+
+PowerShell:
+
+```pwsh
+docker run --rm -v ${pwd}:/tmp verify-cli:latest --file /tmp/examples/same.json
+```
 
 ## Usage
 
