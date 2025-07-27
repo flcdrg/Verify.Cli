@@ -37,7 +37,10 @@ var scrubInlineRemove = new Option<string?>(
     Description = "Text to match and remove from the file content, e.g., 'temp-id-123'.",
 };
 
-var rootCommand = new RootCommand("Verify CLI");
+var rootCommand = new RootCommand("Verify CLI")
+{
+    Description = "A command-line tool to verify files against expected content."
+};
 rootCommand.Options.Add(fileOption);
 rootCommand.Options.Add(verifiedDirOption);
 rootCommand.Options.Add(scrubInlineDateTime);
