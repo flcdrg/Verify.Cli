@@ -2,6 +2,7 @@
 
 [![.NET](https://github.com/flcdrg/Verify.Cli/actions/workflows/dotnet.yml/badge.svg)](https://github.com/flcdrg/Verify.Cli/actions/workflows/dotnet.yml)
 [![NuGet Status](https://img.shields.io/nuget/v/Verify.Cli.svg?label=Verify.Cli)](https://www.nuget.org/packages/Verify.Cli/)
+[![Docker Image Version](https://img.shields.io/docker/v/flcdrg/verify-cli?sort=semver&arch=amd64&label=Docker)](https://hub.docker.com/r/flcdrg/verify-cli)
 
 A command-line tool that uses the [Verify](https://github.com/VerifyTests/Verify) library for regular files (without requiring you to create a unit test project).
 
