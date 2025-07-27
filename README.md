@@ -33,6 +33,7 @@ The first time you use Verify.Cli, it will output the contents of the file.
 - `--scrub-inline-datetime`: Format for inline date times to scrub, e.g., 'yyyy-MM-ddTHH:mm:ss.fffZ' (optional)
 - `--scrub-inline-pattern`: Regex pattern to match inline strings for scrubbing, e.g., '"/astro/[^"]+"|(?&lt;prefix&gt;")/_astro/[^"]+(?&lt;suffix&gt;")' (optional)
 - `--scrub-inline-remove`: Text to match and remove from the file content, e.g., 'temp-id-123' (optional)
+- `--verbosity`: Set the verbosity level. Options are: quiet, minimal, normal, detailed, diagnostic (optional, default: normal)
 
 ### Examples
 
@@ -82,10 +83,24 @@ verify --file C:\tmp\output.html --scrub-inline-remove "data-temp-id"
 
 This will remove all instances of the text "data-temp-id" from the file content before verification.
 
+With verbosity control:
+
+```pwsh
+verify --file C:\tmp\example.txt --verbosity quiet
+```
+
+This will run with minimal output (quiet mode). Available verbosity levels are:
+
+- `quiet`: Minimal output, only errors and critical information
+- `minimal`: Basic output with essential information
+- `normal`: Standard output (default)
+- `detailed`: More detailed output including additional information
+- `diagnostic`: Full diagnostic output for troubleshooting
+
 You can combine options:
 
 ```pwsh
-verify --file C:\tmp\log.txt --verified-dir C:\MyVerifiedFiles --scrub-inline-datetime "yyyy-MM-dd HH:mm:ss" --scrub-inline-pattern "id=\"[^\"]+\"" --scrub-inline-remove "temp-session"
+verify --file C:\tmp\log.txt --verified-dir C:\MyVerifiedFiles --scrub-inline-datetime "yyyy-MM-dd HH:mm:ss" --scrub-inline-pattern "id=\"[^\"]+\"" --scrub-inline-remove "temp-session" --verbosity detailed
 ```
 
 When the files match, the tool exits with code 0 and produces no output.
