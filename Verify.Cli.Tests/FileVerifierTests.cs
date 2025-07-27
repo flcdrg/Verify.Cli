@@ -77,4 +77,45 @@ public class FileVerifierTests
         // Act & Assert - Should not throw
         await FileVerifier.VerifyFileAsync(file, options);
     }
+
+    [Fact]
+    public async Task VerifyFileAsync_NormalVerbosity_ProducesNoOutput()
+    {
+        // Arrange
+        var file = new FileInfo("examples/same.json");
+        var options = new VerifyFileOptions(Verbosity: Verbosity.Normal);
+        
+        // Act & Assert - Should not throw
+        await FileVerifier.VerifyFileAsync(file, options);
+    }
+
+    [Fact]
+    public async Task VerifyFileAsync_DetailedVerbosity_ProducesOutput()
+    {
+        // Arrange
+        var file = new FileInfo("examples/same.json");
+        var options = new VerifyFileOptions(Verbosity: Verbosity.Detailed);
+        
+        // Capture console output
+        var originalOut = Console.Out;
+        using var stringWriter = new StringWriter();
+        Console.SetOut(stringWriter);
+        
+        try
+        {
+            // Act
+            await FileVerifier.VerifyFileAsync(file, options);
+            
+            // Assert
+            var output = stringWriter.ToString();
+            Assert.Contains("Source file path:", output);
+            Assert.Contains("Received path:", output);
+            Assert.Contains("Verified path:", output);
+            Assert.Contains("Files match", output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
+    }
 }
