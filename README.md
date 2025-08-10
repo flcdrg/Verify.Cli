@@ -20,12 +20,12 @@ Once installed, invoke directly via the `verify` command.
 
 ### Docker image
 
-An image is published to Docker Hub. Ensure that you create a volume mapping (via the `-v` parameter) so that the container can access the files you wish to verify.
+An image is published to Docker Hub. Ensure that you create a volume mapping (via the `-v` parameter) so that the container can access the files you wish to verify. You may also need to map the current user using `--user` so that the container has permission to write to the mapped volume.
 
 Bash:
 
 ```bash
-docker run --rm -v $PWD:/tmp flcdrg/verify-cli --file /tmp/examples/same.json
+docker run --rm --user "$(id -u):$(id -g)" -v $PWD:/tmp flcdrg/verify-cli --file /tmp/examples/same.json
 ```
 
 PowerShell:
