@@ -25,16 +25,16 @@ var scrubInlineDateTime = new Option<string?>(
     Description = "Format for inline date times to scrub, e.g., 'yyyy-MM-ddTHH:mm:ss.fffZ'.",
 };
 
-var scrubInlinePattern = new Option<string?>(
+var scrubInlinePattern = new Option<string[]?>(
     name: "--scrub-inline-pattern")
 {
-    Description = "Regex pattern to match inline strings for scrubbing, e.g., '\"/astro/[^\"]+\"', or '(?<prefix>\")/_astro/[^\"]+(?<suffix>\")'.",
+    Description = "One or more regex patterns to match inline strings for scrubbing. Repeat the option to specify multiple patterns.",
 };
 
-var scrubInlineRemove = new Option<string?>(
+var scrubInlineRemove = new Option<string[]?>(
     name: "--scrub-inline-remove")
 {
-    Description = "Text to match and remove from the file content, e.g., 'temp-id-123'.",
+    Description = "One or more text values to remove from the file content. Repeat the option to specify multiple values (exact match, not regex).",
 };
 
 var verbosityOption = new Option<Verbosity?>(
@@ -62,8 +62,8 @@ rootCommand.SetAction(async (innerParseResult) =>
     var options = new VerifyFileOptions(
         VerifiedDir: innerParseResult.GetValue(verifiedDirOption),
         ScrubInlineDatetime: innerParseResult.GetValue(scrubInlineDateTime),
-        ScrubInlinePattern: innerParseResult.GetValue(scrubInlinePattern),
-        ScrubInlineRemove: innerParseResult.GetValue(scrubInlineRemove),
+        ScrubInlinePatterns: innerParseResult.GetValue(scrubInlinePattern),
+        ScrubInlineRemoves: innerParseResult.GetValue(scrubInlineRemove),
         Verbosity: innerParseResult.GetValue(verbosityOption) ?? Verbosity.Normal
     );
 

@@ -12,8 +12,8 @@ public enum Verbosity
 public record VerifyFileOptions(
     DirectoryInfo? VerifiedDir = null,
     string? ScrubInlineDatetime = null,
-    string? ScrubInlinePattern = null,
-    string? ScrubInlineRemove = null,
+    string[]? ScrubInlinePatterns = null,
+    string[]? ScrubInlineRemoves = null,
     Verbosity Verbosity = Verbosity.Normal);
 
 public static class FileVerifier
@@ -33,14 +33,25 @@ public static class FileVerifier
             settings.ScrubInlineDateTimes(options.ScrubInlineDatetime);
         }
 
-        if (options.ScrubInlinePattern != null)
+        if (options.ScrubInlinePatterns != null)
         {
-            settings.AddScrubber(StringScrubber.BuildReplaceStrings(options.ScrubInlinePattern));
+            foreach (var pattern in options.ScrubInlinePatterns)
+            {
+                if (pattern is null)
+                {
+                    continue;
+                }
+                settings.AddScrubber(StringScrubber.BuildReplaceStrings(pattern));
+            }
         }
 
-        if (options.ScrubInlineRemove != null)
+        if (options.ScrubInlineRemoves != null)
         {
-            settings.AddScrubber(StringScrubber.BuildRemoveText(options.ScrubInlineRemove));
+            foreach (var text in options.ScrubInlineRemoves)
+            {
+                // Allow BuildRemoveText to validate empties and throw as per existing behavior
+                settings.AddScrubber(StringScrubber.BuildRemoveText(text));
+            }
         }
 
         VerifierSettings.OmitContentFromException();
