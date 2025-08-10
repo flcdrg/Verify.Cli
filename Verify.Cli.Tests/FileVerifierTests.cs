@@ -37,8 +37,26 @@ public class FileVerifierTests
 
         // Pattern includes named groups for prefix and suffix
         // This ensures that the replacement string retains the original quotes around the matched pattern
-        var options = new VerifyFileOptions(ScrubInlinePattern: "(?<prefix>\")/_astro/[^\"]+(?<suffix>\")");
+        var options = new VerifyFileOptions(ScrubInlinePatterns: new[] { "(?<prefix>\")/_astro/[^\"]+(?<suffix>\")" });
         
+        // Act & Assert
+        await FileVerifier.VerifyFileAsync(file, options);
+    }
+
+    [Fact]
+    public async Task FileWithMultipleInlinePatterns_ScrubsAllCorrectly()
+    {
+        // Arrange
+        var file = new FileInfo("examples/azure-pipeline-template-expression.html");
+
+        // Apply two patterns: one for /_astro paths and another for "/astro" paths
+        var options = new VerifyFileOptions(
+            ScrubInlinePatterns: new[]
+            {
+                "(?<prefix>\")/_astro/[^\"]+(?<suffix>\")",
+                "\"/astro/[^\"]+\""
+            });
+
         // Act & Assert
         await FileVerifier.VerifyFileAsync(file, options);
     }
@@ -50,7 +68,7 @@ public class FileVerifierTests
         var file = new FileInfo("examples/withRemovableIds.html");
 
         // Simple text to remove (not regex) - removes all instances
-        var options = new VerifyFileOptions(ScrubInlineRemove: " data-temp-id");
+        var options = new VerifyFileOptions(ScrubInlineRemoves: new[] { " data-temp-id" });
         
         // Act & Assert
         await FileVerifier.VerifyFileAsync(file, options);
@@ -61,7 +79,7 @@ public class FileVerifierTests
     {
         // Arrange
         var file = new FileInfo("examples/same.json");
-        var options = new VerifyFileOptions(ScrubInlineRemove: "");
+        var options = new VerifyFileOptions(ScrubInlineRemoves: new[] { "" });
         
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(async () => await FileVerifier.VerifyFileAsync(file, options));
@@ -72,9 +90,20 @@ public class FileVerifierTests
     {
         // Arrange
         var file = new FileInfo("examples/same.json");
-        var options = new VerifyFileOptions(ScrubInlineRemove: null);
+        var options = new VerifyFileOptions(ScrubInlineRemoves: null);
         
         // Act & Assert - Should not throw
+        await FileVerifier.VerifyFileAsync(file, options);
+    }
+
+    [Fact]
+    public async Task FileWithMultipleInlineRemove_RemovesAllCorrectly()
+    {
+        // Arrange
+        var file = new FileInfo("examples/multiRemove.txt");
+        var options = new VerifyFileOptions(ScrubInlineRemoves: new[] { "REMOVE1", "REMOVE2" });
+
+        // Act & Assert
         await FileVerifier.VerifyFileAsync(file, options);
     }
 

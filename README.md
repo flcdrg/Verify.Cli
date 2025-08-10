@@ -49,8 +49,8 @@ The first time you use Verify.Cli, it will output the contents of the file.
 - `--file` or `-f`: The file to verify (required)
 - `--verified-dir` or `-d`: Directory to store/look for .verified files (optional)
 - `--scrub-inline-datetime`: Format for inline date times to scrub, e.g., 'yyyy-MM-ddTHH:mm:ss.fffZ' (optional)
-- `--scrub-inline-pattern`: Regex pattern to match inline strings for scrubbing, e.g., '"/astro/[^"]+"|(?&lt;prefix&gt;")/_astro/[^"]+(?&lt;suffix&gt;")' (optional)
-- `--scrub-inline-remove`: Text to match and remove from the file content, e.g., 'temp-id-123' (optional)
+- `--scrub-inline-pattern`: One or more regex patterns to match inline strings for scrubbing. Repeat the option to specify multiple patterns. For example: '"/astro/[^"]+"' or '(?&lt;prefix&gt;")/_astro/[^"]+(?&lt;suffix&gt;")' (optional)
+- `--scrub-inline-remove`: One or more text values to remove from the file content (exact match, not regex). Repeat the option to specify multiple values, e.g., 'temp-id-123' (optional)
 - `--verbosity`: Set the verbosity level. Options are: quiet, minimal, normal, detailed, diagnostic (optional, default: normal)
 
 ### Examples
@@ -85,6 +85,14 @@ verify --file C:\tmp\output.html --scrub-inline-pattern "\"/astro/[^\"]+\""
 
 This will scrub inline strings matching the regex pattern (e.g., dynamic asset paths like "/astro/chunk-123.js") from the file content before verification.
 
+With multiple pattern scrubbers (repeat the option):
+
+```pwsh
+verify --file C:\tmp\output.html --scrub-inline-pattern "\"/astro/[^\"]+\"" --scrub-inline-pattern "(?<prefix>\")/_astro/[^\"]+(?<suffix>\")"
+```
+
+This applies both patterns in order.
+
 With pattern scrubbing using named groups to preserve parts:
 
 ```pwsh
@@ -100,6 +108,14 @@ verify --file C:\tmp\output.html --scrub-inline-remove "data-temp-id"
 ```
 
 This will remove all instances of the text "data-temp-id" from the file content before verification.
+
+With multiple text removals (repeat the option):
+
+```pwsh
+verify --file C:\tmp\output.html --scrub-inline-remove "data-temp-id" --scrub-inline-remove "temp-session"
+```
+
+This removes both values.
 
 With verbosity control:
 
@@ -118,7 +134,7 @@ This will run with minimal output (quiet mode). Available verbosity levels are:
 You can combine options:
 
 ```pwsh
-verify --file C:\tmp\log.txt --verified-dir C:\MyVerifiedFiles --scrub-inline-datetime "yyyy-MM-dd HH:mm:ss" --scrub-inline-pattern "id=\"[^\"]+\"" --scrub-inline-remove "temp-session" --verbosity detailed
+verify --file C:\tmp\log.txt --verified-dir C:\MyVerifiedFiles --scrub-inline-datetime "yyyy-MM-dd HH:mm:ss" --scrub-inline-pattern "id=\"[^\"]+\"" --scrub-inline-pattern "data-asset=\"[^\"]+\"" --scrub-inline-remove "temp-session" --verbosity detailed
 ```
 
 When the files match, the tool exits with code 0 and produces no output.
