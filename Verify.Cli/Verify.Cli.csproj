@@ -21,7 +21,7 @@ As it leverages the Verify library, when run in an interactive environment it ca
   </PropertyGroup>
   <ItemGroup>
     <Using Include="VerifyTests" />
-    <PackageReference Include="System.CommandLine" Version="2.0.0-rc.1.25451.107" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-rc.2.25502.107" />
     <PackageReference Include="Verify" Version="31.0.1" />
   </ItemGroup>
   <ItemGroup>
