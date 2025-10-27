@@ -161,7 +161,7 @@ jobs:
 
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: container
 
@@ -202,7 +202,7 @@ jobs:
         with:
           version: ${{ needs.build.outputs.GitBuildVersionSimple }}
 
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           path: artifacts
 
