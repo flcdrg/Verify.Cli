@@ -22,7 +22,7 @@ As it leverages the Verify library, when run in an interactive environment it ca
   <ItemGroup>
     <Using Include="VerifyTests" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-rc.2.25502.107" />
-    <PackageReference Include="Verify" Version="31.5.0" />
+    <PackageReference Include="Verify" Version="31.5.2" />
   </ItemGroup>
   <ItemGroup>
     <None Include="../README.md" Pack="true" PackagePath="\" />
