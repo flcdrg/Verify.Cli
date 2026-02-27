@@ -108,14 +108,14 @@ jobs:
         run: dotnet publish -r win-x64 --self-contained -p:PublishSingleFile=true Verify.Cli
 
       - name: Build logs
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: logs
           # A file, directory or wildcard pattern that describes what to upload
           path: "*.binlog"
 
       - name: Container Archive
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: container
           path: container.tar.gz
@@ -124,26 +124,26 @@ jobs:
         run: tar -tvf container.tar.gz
 
       - name: Linux Binary
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: linux-x64
           path: Verify.Cli/bin/Release/net9.0/linux-x64/publish
 
       - name: Windows Binary
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: win-x64
           # A file, directory or wildcard pattern that describes what to upload
           path: Verify.Cli/bin/Release/net9.0/win-x64/publish
 
       - name: Zip
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: zip
           path: Verify.Cli.*.zip
 
       - name: NuGet package
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: nupkg
           path: Verify.Cli/nupkg/*.nupkg
