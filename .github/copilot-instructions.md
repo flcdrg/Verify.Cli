@@ -15,3 +15,5 @@ Other additional tests to validate both the Verify library and the CLI tool are 
 All Markdown files should comply with Markdownlint rules.
 
 All parameters for the command-line tool should be documented in the `README.md` file, including examples of usage.
+
+When running unit tests and you don't want Verify to launch an interactive diff tool, set the environment variable `DiffEngine_Disabled` with the value `true`. This will cause Verify to write the diff output to the console instead of launching a diff tool.

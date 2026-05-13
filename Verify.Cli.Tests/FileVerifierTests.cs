@@ -147,4 +147,45 @@ public class FileVerifierTests
             Console.SetOut(originalOut);
         }
     }
+
+    [Fact]
+    public async Task FileWithOverrideFilename_UsesAlternateVerifiedFilename()
+    {
+        // Arrange
+        var file = new FileInfo("examples/override-test.json");
+        var options = new VerifyFileOptions(OverrideFilename: "override-alternate");
+        
+        // Act & Assert
+        await FileVerifier.VerifyFileAsync(file, options);
+    }
+
+    [Fact]
+    public async Task FileWithOverrideFilename_ProducesCorrectPathInOutput()
+    {
+        // Arrange
+        var file = new FileInfo("examples/override-test.json");
+        var options = new VerifyFileOptions(OverrideFilename: "override-alternate", Verbosity: Verbosity.Detailed);
+        
+        // Capture console output
+        var originalOut = Console.Out;
+        using var stringWriter = new StringWriter();
+        Console.SetOut(stringWriter);
+        
+        try
+        {
+            // Act
+            await FileVerifier.VerifyFileAsync(file, options);
+            
+            // Assert
+            var output = stringWriter.ToString();
+            Assert.Contains("Verified path:", output);
+            // The override filename results in the path being override-alternate.json.verified.json
+            // because InnerVerifier adds the extension and then adds .verified
+            Assert.Contains("override-alternate.json.verified.json", output);
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+        }
+    }
 }
