@@ -43,6 +43,12 @@ var verbosityOption = new Option<Verbosity?>(
     Description = "Set the verbosity level. Options are: quiet, minimal, normal, detailed, diagnostic.",
 };
 
+var overrideFilenameOption = new Option<string?>(
+    name: "--override-filename")
+{
+    Description = "An alternate filename (without extension) to use for the verified file. If not specified, the source filename is used.",
+};
+
 var rootCommand = new RootCommand("Verify CLI")
 {
     Description = "A command-line tool to verify files against expected content."
@@ -53,6 +59,7 @@ rootCommand.Options.Add(scrubInlineDateTime);
 rootCommand.Options.Add(scrubInlinePattern);
 rootCommand.Options.Add(scrubInlineRemove);
 rootCommand.Options.Add(verbosityOption);
+rootCommand.Options.Add(overrideFilenameOption);
 
 var parseResult = rootCommand.Parse(args);
 
@@ -64,7 +71,8 @@ rootCommand.SetAction(async (innerParseResult) =>
         ScrubInlineDatetime: innerParseResult.GetValue(scrubInlineDateTime),
         ScrubInlinePatterns: innerParseResult.GetValue(scrubInlinePattern),
         ScrubInlineRemoves: innerParseResult.GetValue(scrubInlineRemove),
-        Verbosity: innerParseResult.GetValue(verbosityOption) ?? Verbosity.Normal
+        Verbosity: innerParseResult.GetValue(verbosityOption) ?? Verbosity.Normal,
+        OverrideFilename: innerParseResult.GetValue(overrideFilenameOption)
     );
 
     if (file == null)

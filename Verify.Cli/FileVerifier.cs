@@ -14,7 +14,8 @@ public record VerifyFileOptions(
     string? ScrubInlineDatetime = null,
     string[]? ScrubInlinePatterns = null,
     string[]? ScrubInlineRemoves = null,
-    Verbosity Verbosity = Verbosity.Normal);
+    Verbosity Verbosity = Verbosity.Normal,
+    string? OverrideFilename = null);
 
 public static class FileVerifier
 {
@@ -68,7 +69,7 @@ public static class FileVerifier
             
             // Calculate received and verified paths to match Verify library naming convention
             var directory = options.VerifiedDir?.FullName ?? Path.GetDirectoryName(fullName)!;
-            var fileName = Path.GetFileNameWithoutExtension(fullName);
+            var fileName = options.OverrideFilename ?? Path.GetFileNameWithoutExtension(fullName);
             var extension = Path.GetExtension(fullName);
             
             var receivedPath = Path.Combine(directory, $"{fileName}.received{extension}");
@@ -80,7 +81,7 @@ public static class FileVerifier
         
         try
         {
-            await Verifier.VerifyFile(fullName, settings, file.FullName);
+            await Verifier.VerifyFile(fullName, settings, file.FullName, options.OverrideFilename);
             
             // If we reach here, verification succeeded (files match)
             if (options.Verbosity >= Verbosity.Detailed)

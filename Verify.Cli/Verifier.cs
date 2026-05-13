@@ -5,10 +5,11 @@ public static partial class Verifier
     public static SettingsTask VerifyFile(
         string path,
         VerifySettings settings,
-        string sourceFile) =>
-        Verify(settings, sourceFile, _ => _.VerifyFile(path, null, null));
+        string sourceFile,
+        string? overrideFilename = null) =>
+        Verify(settings, sourceFile, overrideFilename, _ => _.VerifyFile(path, null, null));
 
-    private static InnerVerifier GetVerifier(VerifySettings settings, string sourceFile)
+    private static InnerVerifier GetVerifier(VerifySettings settings, string sourceFile, string? overrideFilename = null)
     {
         // Create a copy of settings without the UseDirectory setting for InnerVerifier
         var modifiedSettings = new VerifySettings(settings);
@@ -26,20 +27,33 @@ public static partial class Verifier
         // If we have a custom directory, use it; otherwise use the source file directory
         var directory = customDirectory ?? sourceFileDirectory;
         
-        return new(directory, Path.GetFileName(sourceFile), modifiedSettings);
+        // Use override filename if provided, otherwise use the source filename with extension
+        string filename;
+        if (overrideFilename != null)
+        {
+            var sourceExtension = Path.GetExtension(sourceFile);
+            filename = $"{overrideFilename}{sourceExtension}";
+        }
+        else
+        {
+            filename = Path.GetFileName(sourceFile);
+        }
+        
+        return new(directory, filename, modifiedSettings);
     }
         
 
     private static SettingsTask Verify(
         VerifySettings? settings,
         string sourceFile,
+        string? overrideFilename,
         Func<InnerVerifier, Task<VerifyResult>> verify)
     {
         return new(
             settings,
             async verifySettings =>
             {
-                using var verifier = GetVerifier(verifySettings, sourceFile);
+                using var verifier = GetVerifier(verifySettings, sourceFile, overrideFilename);
                 return await verify(verifier);
             });
     }
