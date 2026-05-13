@@ -14,7 +14,8 @@ public record VerifyFileOptions(
     string? ScrubInlineDatetime = null,
     string[]? ScrubInlinePatterns = null,
     string[]? ScrubInlineRemoves = null,
-    Verbosity Verbosity = Verbosity.Normal);
+    Verbosity Verbosity = Verbosity.Normal,
+    string? OverrideFilename = null);
 
 public static class FileVerifier
 {
@@ -68,11 +69,23 @@ public static class FileVerifier
             
             // Calculate received and verified paths to match Verify library naming convention
             var directory = options.VerifiedDir?.FullName ?? Path.GetDirectoryName(fullName)!;
-            var fileName = Path.GetFileNameWithoutExtension(fullName);
             var extension = Path.GetExtension(fullName);
             
-            var receivedPath = Path.Combine(directory, $"{fileName}.received{extension}");
-            var verifiedPath = Path.Combine(directory, $"{fileName}.verified{extension}");
+            // When override filename is provided, it's treated as the base name (without extension)
+            // and the extension is appended to it before InnerVerifier processes it
+            string baseName;
+            if (options.OverrideFilename != null)
+            {
+                baseName = $"{options.OverrideFilename}{extension}";
+            }
+            else
+            {
+                baseName = Path.GetFileName(fullName);
+            }
+            
+            // InnerVerifier adds .received and .verified to the base name
+            var receivedPath = Path.Combine(directory, $"{baseName}.received.json");
+            var verifiedPath = Path.Combine(directory, $"{baseName}.verified.json");
             
             Console.WriteLine($"Received path: {receivedPath}");
             Console.WriteLine($"Verified path: {verifiedPath}");
@@ -80,7 +93,7 @@ public static class FileVerifier
         
         try
         {
-            await Verifier.VerifyFile(fullName, settings, file.FullName);
+            await Verifier.VerifyFile(fullName, settings, file.FullName, options.OverrideFilename);
             
             // If we reach here, verification succeeded (files match)
             if (options.Verbosity >= Verbosity.Detailed)

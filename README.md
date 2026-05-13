@@ -48,6 +48,7 @@ The first time you use Verify.Cli, it will output the contents of the file.
 
 - `--file` or `-f`: The file to verify (required)
 - `--verified-dir` or `-d`: Directory to store/look for .verified files (optional)
+- `--override-filename`: An alternate filename (without extension) to use for the verified file. If not specified, the source filename is used (optional)
 - `--scrub-inline-datetime`: Format for inline date times to scrub, e.g., 'yyyy-MM-ddTHH:mm:ss.fffZ' (optional)
 - `--scrub-inline-pattern`: One or more regex patterns to match inline strings for scrubbing. Repeat the option to specify multiple patterns. For example: '"/astro/[^"]+"' or '(?&lt;prefix&gt;")/_astro/[^"]+(?&lt;suffix&gt;")' (optional)
 - `--scrub-inline-remove`: One or more text values to remove from the file content (exact match, not regex). Repeat the option to specify multiple values, e.g., 'temp-id-123' (optional)
@@ -68,6 +69,14 @@ verify --file C:\tmp\example.txt --verified-dir C:\MyVerifiedFiles
 ```
 
 This will look for the verified file at `C:\MyVerifiedFiles\example.txt.verified.txt` instead of the default location next to the source file.
+
+With override filename:
+
+```pwsh
+verify --file C:\tmp\example.txt --override-filename custom-name
+```
+
+This will use `custom-name.verified.txt` instead of `example.txt.verified.txt` for the verified file.
 
 With date time scrubbing:
 
