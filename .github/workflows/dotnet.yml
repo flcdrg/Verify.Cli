@@ -48,7 +48,7 @@ jobs:
       GitBuildVersionSimple: ${{ steps.version.outputs.GitBuildVersionSimple }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # full history
 
@@ -193,7 +193,7 @@ jobs:
 
     if: github.ref == 'refs/heads/main' # Running this job only for main branch
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: release-drafter/release-drafter@v7
         id: create_release
