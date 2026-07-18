@@ -27,6 +27,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      id-token: write
 
     env:
       source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
