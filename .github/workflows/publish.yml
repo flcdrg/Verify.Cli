@@ -21,6 +21,8 @@ jobs:
 
   nuget:
     runs-on: ubuntu-latest
+    environment:
+      name: production
 
     permissions:
       contents: read
@@ -53,8 +55,14 @@ jobs:
       - name: Publish to GPR
         run: dotnet nuget push *.nupkg --source ${{ env.source-url }} -k ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
 
+      - name: NuGet login (OIDC → temp API key)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Publish to NuGet.org
-        run: dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        run: dotnet nuget push *.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ steps.login.outputs.NUGET_API_KEY }}
 
   containers:
     runs-on: ubuntu-latest
