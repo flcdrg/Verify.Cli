@@ -74,7 +74,7 @@ jobs:
         run: printenv | sort
 
       - name: Test
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test --no-build --verbosity normal --configuration ${{ env.configuration }}
 
       - name: Pack
         run: dotnet pack
