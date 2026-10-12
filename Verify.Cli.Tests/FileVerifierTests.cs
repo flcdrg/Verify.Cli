@@ -37,7 +37,7 @@ public class FileVerifierTests
 
         // Pattern includes named groups for prefix and suffix
         // This ensures that the replacement string retains the original quotes around the matched pattern
-        var options = new VerifyFileOptions(ScrubInlinePatterns: new[] { "(?<prefix>\")/_astro/[^\"]+(?<suffix>\")" });
+        var options = new VerifyFileOptions(ScrubInlinePatterns: ["(?<prefix>\")/_astro/[^\"]+(?<suffix>\")"]);
         
         // Act & Assert
         await FileVerifier.VerifyFileAsync(file, options);
@@ -51,11 +51,11 @@ public class FileVerifierTests
 
         // Apply two patterns: one for /_astro paths and another for "/astro" paths
         var options = new VerifyFileOptions(
-            ScrubInlinePatterns: new[]
-            {
+            ScrubInlinePatterns:
+            [
                 "(?<prefix>\")/_astro/[^\"]+(?<suffix>\")",
                 "\"/astro/[^\"]+\""
-            });
+            ]);
 
         // Act & Assert
         await FileVerifier.VerifyFileAsync(file, options);
@@ -68,7 +68,7 @@ public class FileVerifierTests
         var file = new FileInfo("examples/withRemovableIds.html");
 
         // Simple text to remove (not regex) - removes all instances
-        var options = new VerifyFileOptions(ScrubInlineRemoves: new[] { " data-temp-id" });
+        var options = new VerifyFileOptions(ScrubInlineRemoves: [" data-temp-id"]);
         
         // Act & Assert
         await FileVerifier.VerifyFileAsync(file, options);
@@ -79,7 +79,7 @@ public class FileVerifierTests
     {
         // Arrange
         var file = new FileInfo("examples/same.json");
-        var options = new VerifyFileOptions(ScrubInlineRemoves: new[] { "" });
+        var options = new VerifyFileOptions(ScrubInlineRemoves: [""]);
         
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(async () => await FileVerifier.VerifyFileAsync(file, options));
@@ -101,7 +101,7 @@ public class FileVerifierTests
     {
         // Arrange
         var file = new FileInfo("examples/multiRemove.txt");
-        var options = new VerifyFileOptions(ScrubInlineRemoves: new[] { "REMOVE1", "REMOVE2" });
+        var options = new VerifyFileOptions(ScrubInlineRemoves: ["REMOVE1", "REMOVE2"]);
 
         // Act & Assert
         await FileVerifier.VerifyFileAsync(file, options);
@@ -127,7 +127,7 @@ public class FileVerifierTests
         
         // Capture console output
         var originalOut = Console.Out;
-        using var stringWriter = new StringWriter();
+        await using var stringWriter = new StringWriter();
         Console.SetOut(stringWriter);
         
         try
@@ -168,7 +168,7 @@ public class FileVerifierTests
         
         // Capture console output
         var originalOut = Console.Out;
-        using var stringWriter = new StringWriter();
+        await using var stringWriter = new StringWriter();
         Console.SetOut(stringWriter);
         
         try

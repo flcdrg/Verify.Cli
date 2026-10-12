@@ -5,7 +5,7 @@ var fileOption = new Option<FileInfo?>(
     name: "--file"
 )
 {
-    Description = "The file to verify",
+    Description = "The file to verify"
 };
 
 fileOption.Aliases.Add("-f");
@@ -15,38 +15,38 @@ var verifiedDirOption = new Option<DirectoryInfo?>(
     name: "--verified-dir"
 )
 {
-    Description = "Directory to store/look for .verified files",
+    Description = "Directory to store/look for .verified files"
 };
 verifiedDirOption.Aliases.Add("-d");
 
 var scrubInlineDateTime = new Option<string?>(
     name: "--scrub-inline-datetime")
 {
-    Description = "Format for inline date times to scrub, e.g., 'yyyy-MM-ddTHH:mm:ss.fffZ'.",
+    Description = "Format for inline date times to scrub, e.g., 'yyyy-MM-ddTHH:mm:ss.fffZ'."
 };
 
 var scrubInlinePattern = new Option<string[]?>(
     name: "--scrub-inline-pattern")
 {
-    Description = "One or more regex patterns to match inline strings for scrubbing. Repeat the option to specify multiple patterns.",
+    Description = "One or more regex patterns to match inline strings for scrubbing. Repeat the option to specify multiple patterns."
 };
 
 var scrubInlineRemove = new Option<string[]?>(
     name: "--scrub-inline-remove")
 {
-    Description = "One or more text values to remove from the file content. Repeat the option to specify multiple values (exact match, not regex).",
+    Description = "One or more text values to remove from the file content. Repeat the option to specify multiple values (exact match, not regex)."
 };
 
 var verbosityOption = new Option<Verbosity?>(
     name: "--verbosity")
 {
-    Description = "Set the verbosity level. Options are: quiet, minimal, normal, detailed, diagnostic.",
+    Description = "Set the verbosity level. Options are: quiet, minimal, normal, detailed, diagnostic."
 };
 
 var overrideFilenameOption = new Option<string?>(
     name: "--override-filename")
 {
-    Description = "An alternate filename (without extension) to use for the verified file. If not specified, the source filename is used.",
+    Description = "An alternate filename (without extension) to use for the verified file. If not specified, the source filename is used."
 };
 
 var rootCommand = new RootCommand("Verify CLI")

@@ -21,8 +21,8 @@ public static class FileVerifier
 {
     public static async Task VerifyFileAsync(FileInfo file, VerifyFileOptions options)
     {
-        if (file == null) throw new ArgumentNullException(nameof(file));
-        if (options == null) throw new ArgumentNullException(nameof(options));
+        ArgumentNullException.ThrowIfNull(file);
+        ArgumentNullException.ThrowIfNull(options);
 
         var fullName = file.FullName;
 
@@ -84,8 +84,8 @@ public static class FileVerifier
             }
             
             // InnerVerifier adds .received and .verified to the base name
-            var receivedPath = Path.Combine(directory, $"{baseName}.received.json");
-            var verifiedPath = Path.Combine(directory, $"{baseName}.verified.json");
+            var receivedPath = Path.Combine(directory, $"{baseName}.received{extension}");
+            var verifiedPath = Path.Combine(directory, $"{baseName}.verified{extension}");
             
             Console.WriteLine($"Received path: {receivedPath}");
             Console.WriteLine($"Verified path: {verifiedPath}");
